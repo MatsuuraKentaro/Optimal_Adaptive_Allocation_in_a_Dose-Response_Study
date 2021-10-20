@@ -15,11 +15,10 @@ class MCPModEnv(gym.Env):
         self.N_ini   = 50
         self.N_block = 10
         self.N_total = 150
+        self.Delta   = 1.3
         self.SD      = np.sqrt(4.5)
-        max_eff = robjects.FloatVector(np.array([self.max_eff]))
-        alpha   = robjects.FloatVector(np.array([self.alpha]))
-        robjects.globalenv['max_eff'] = max_eff
-        robjects.globalenv['alpha']   = alpha
+        robjects.globalenv['max_eff'] = robjects.FloatVector(np.array([self.max_eff]))
+        robjects.globalenv['alpha']   = robjects.FloatVector(np.array([self.alpha]))
         robjects.r('''
             suppressPackageStartupMessages(library('DoseFinding'))
             doses <- seq(from=0, to=8, by=2)   #  should be changed with self.D
@@ -61,17 +60,15 @@ class MCPModEnv(gym.Env):
 
         if len(self.doses) >= self.N_total:
             done = True
-            sim_doses_idx = robjects.IntVector(np.array(self.doses) + 1)
-            sim_resps     = robjects.FloatVector(self.resps)
-            robjects.globalenv['sim_doses_idx'] = sim_doses_idx
-            robjects.globalenv['sim_resps']     = sim_resps
-
+            robjects.globalenv['sim_doses_idx'] = robjects.IntVector(np.array(self.doses) + 1)
+            robjects.globalenv['sim_resps']     = robjects.FloatVector(self.resps)
+            robjects.globalenv['delta']         = robjects.FloatVector([self.Delta])
             robjects.r('''
                 set.seed(1)
                 sim_doses <- doses[sim_doses_idx]
-                suppressMessages(resmm <- MCPMod(sim_doses, sim_resps, models=models_test, Delta=1.3, alpha=alpha, selModel='AIC', bnds=bnds))
+                suppressMessages(resmm <- MCPMod(sim_doses, sim_resps, models=models_test, Delta=delta, alpha=alpha, selModel='AIC', bnds=bnds))
                 if (is.null(resmm$selMod)) {
-                  suppressMessages(resmm <- MCPMod(sim_doses, sim_resps, models=models_test, Delta=1.3, alpha=1.0, selModel='AIC', bnds=bnds))
+                  suppressMessages(resmm <- MCPMod(sim_doses, sim_resps, models=models_test, Delta=delta, alpha=1.0, selModel='AIC', bnds=bnds))
                 }
                 selmod <- resmm$selMod
                 pvals <- attr(resmm$MCTtest$tStat, 'pVal')
@@ -115,15 +112,15 @@ class MCPModEnv(gym.Env):
         else:
             self.model_name = self.model_type
         robjects.globalenv['model_name'] = robjects.StrVector([self.model_name])
-        robjects.globalenv['SD']         = robjects.FloatVector([self.SD])
+        robjects.globalenv['delta']      = robjects.FloatVector([self.Delta])
         robjects.r('''
             if (model_name == 'flat') {
               resps_true <- rep(0, length(doses))
               med_range <- c(0, 0)
             } else {
               resps_true <- resps[, model_name]
-              med_lower <- unname(TD(models, Delta=1.3*0.9)[model_name])
-              med_upper <- unname(TD(models, Delta=1.3*1.1)[model_name])
+              med_lower <- unname(TD(models, Delta=delta*0.9)[model_name])
+              med_upper <- unname(TD(models, Delta=delta*1.1)[model_name])
               med_upper <- ifelse(!is.na(med_upper) & med_upper <= mD, med_upper, mD)
               med_range <- c(med_lower, med_upper)
             }
