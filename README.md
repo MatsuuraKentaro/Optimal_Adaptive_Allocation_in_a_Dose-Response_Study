@@ -33,7 +33,7 @@ install.packages('DoseFinding')
 
 ## How to Use
 ### Change simulation settings
-To change the simulation settings, it is necessary to understand `MCPMod/envs/MCPModEnv.py`. This part is a bit difficult because of the interaction between R and Python.
+To change the simulation settings, it is necessary to understand `MCPMod/envs/MCPModEnv.py`. This part is a bit difficult because of the interaction between R and Python. Therefore, we have a plan to create an R package to use our method easily.
 
 ### Obtain adaptive allocation rule
 To obtain RL-MAE by learning, please run `learn_RL-MAE.py` like:
