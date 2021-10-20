@@ -62,7 +62,6 @@ class MCPModEnv(gym.Env):
             done = True
             robjects.globalenv['sim_doses_idx'] = robjects.IntVector(np.array(self.doses) + 1)
             robjects.globalenv['sim_resps']     = robjects.FloatVector(self.resps)
-            robjects.globalenv['delta']         = robjects.FloatVector([self.Delta])
             robjects.r('''
                 set.seed(1)
                 sim_doses <- doses[sim_doses_idx]
