@@ -1,5 +1,5 @@
 # Optimal Adaptive Allocation using Deep Reinforcement Learning in a Dose-Response Study
-Supplementary Materials for Kentaro Matsuura, Junya Honda, Imad El Hanafi, Takashi Sozu, Kentaro Sakamaki "Optimal Adaptive Allocation using Deep Reinforcement Learning in a Dose-Response Study" Statistics in Medicine 202x; (doi:xxxxx)
+Supplementary Materials for Kentaro Matsuura, Junya Honda, Imad El Hanafi, Takashi Sozu, Kentaro Sakamaki "Optimal Adaptive Allocation using Deep Reinforcement Learning in a Dose-Response Study" Statistics in Medicine 2021; (doi:10.1002/sim.9247)
 
 ## How to Setup
 We recommend using Linux or WSL on Windows, because the Ray package in Python is more stable on Linux. For example, in Ubuntu 20.04 (Python 3.8 was already installed), I was able to install the necessary packages with the following commands.
