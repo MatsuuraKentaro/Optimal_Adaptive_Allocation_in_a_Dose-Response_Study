@@ -49,9 +49,9 @@ while not done:
     action = agent.compute_action(state, full_fetch=True)
     probs = softmax(action[2]['action_dist_inputs'])
     actions = np.random.choice(D, size=N_block, p=probs)
-    state, reward, done, info = env.step(actions, action_array=True)
     results_pi.append([model_true, max_eff_true, simID, blockID, *probs, *state])
-    blockID += 1    
+    state, reward, done, info = env.step(actions, action_array=True)
+    blockID += 1
     if done:
         scores = [info[score_name] for score_name in score_names]
         results_score.append([model_true, max_eff_true, simID, *scores, *state])
