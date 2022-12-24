@@ -19,7 +19,7 @@ N_total = 150  # num of total subjects
 len_state = (D-1) + D + D
 reward_name = 'score_MAE'
 alpha = 0.0165  # after adjustment
-checkpoint_path = 'checkpoint/checkpoint_RL-MAE'
+checkpoint_path = 'checkpoint/checkpoint_001000'
 model_true = 'linear'
 max_eff_true = 1.65
 score_names = ['pval', 'selmod', 'med', 'score_power', 'score_MS', 'score_TD', 'score_MAE']
@@ -34,7 +34,7 @@ sim_config = {'reward_type': reward_name, 'model_type':model_true, 'max_eff':max
 config['env_config'] = sim_config
 agent = PPOTrainer(config, ENV_NAME)
 env = gym.make(ENV_NAME, config = sim_config)
-agent.restore(checkpoint_path)
+agent.load_checkpoint(checkpoint_path)
 
 results_score = []
 results_data  = []
@@ -46,7 +46,7 @@ state = env.reset()
 done = False
 blockID = 1
 while not done:
-    action = agent.compute_action(state, full_fetch=True)
+    action = agent.compute_single_action(state, full_fetch=True)
     probs = softmax(action[2]['action_dist_inputs'])
     actions = np.random.choice(D, size=N_block, p=probs)
     results_pi.append([model_true, max_eff_true, simID, blockID, *probs, *state])

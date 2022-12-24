@@ -15,6 +15,7 @@ config = DEFAULT_CONFIG.copy()
 ## hyperparameter settings
 config['seed'] = 123
 config['gamma'] = 1.0
+config['framework'] = 'torch'
 config['num_workers'] = 4
 config['num_sgd_iter'] = 20
 config['num_cpus_per_worker'] = 1

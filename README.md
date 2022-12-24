@@ -9,20 +9,14 @@ We recommend using Linux or WSL on Windows, because the Ray package in Python is
 sudo apt update
 sudo apt upgrade
 sudo apt install python3-pip
-sudo pip3 install tensorflow numpy pandas gym
-sudo apt install cmake
+sudo pip3 install torch
 sudo pip3 install -U ray
-sudo pip3 install 'ray[rllib]'
 ```
 
 ### Install R and RPy2
+To install R, see https://cran.r-project.org/bin/linux/ubuntu/
+
 ```
-echo -e "\n## For R package"  | sudo tee -a /etc/apt/sources.list
-echo "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" | sudo tee -a /etc/apt/sources.list
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-sudo apt update
-sudo apt install make g++ r-base
-sudo apt install libxml2-dev libssl-dev libcurl4-openssl-dev
 sudo pip3 install rpy2
 ```
 
@@ -44,10 +38,10 @@ nohup python3 learn_RL-MAE.py > std.log 2> err.log &
 
 To obtain other RL-methods, please change the `reward_type` in line 25 in `learn_RL-MAE.py` to something like `score_TD`, then run the modified file.
 
-When we used `c2-standard-4`（vCPUx4, RAM16GB) on Google Cloud Platform, the learning was completed within a day.
+When we used `c2-standard-4` (vCPUx4, RAM16GB) on Google Cloud Platform, the learning was completed within a day.
 
 ### Simulate single trial
-After the learning, we will obtain a checkpoint in `~/ray_results/PPO_MCPMod-v0_[datetime]-[xxx]/checkpoint-[yyy]/`. To simulate single trial using the obtained rule, please move the checkpoint files (`checkpoint` and `checkpoint.tune_metadata`) in the directory to `checkpoint/` in this repository, and rename the files as you like (see the example files). Then, please run `simulate-single-trial_RL-MAE.py` like:
+After the learning, we will obtain a checkpoint in `~/ray_results/PPO_MCPMod-v0_[datetime]-[xxx]/checkpoint-[yyy]/`. To simulate single trial using the obtained rule, please move the checkpoint directory (`checkpoint-[yyy]`) to `checkpoint/` in this repository, and edit the path in `simulate-single-trial_RL-MAE.py`. Then, please run it:
 
 ```
 python3 simulate-single-trial_RL-MAE.py
