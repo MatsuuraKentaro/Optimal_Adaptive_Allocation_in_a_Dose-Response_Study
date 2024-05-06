@@ -107,7 +107,7 @@ class MCPModEnv(gym.Env):
 
     def reset(self):
         if self.model_type == 'random':
-            self.model_name = self.np_random.choice(['linear', 'emax', 'sigEmax'])
+            self.model_name = self.np_random.choice(['linear', 'emax', 'sigEmax', 'exponential', 'quadratic'])
         else:
             self.model_name = self.model_type
         robjects.globalenv['model_name'] = robjects.StrVector([self.model_name])
